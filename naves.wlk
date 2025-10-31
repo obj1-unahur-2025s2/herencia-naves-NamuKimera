@@ -7,11 +7,11 @@ class NaveEspacial {
   method direccionSol() = direccionSol
   
   method acelerar(cuanto) {
-    velocidad = cuanto.max(100000)
+    velocidad = (velocidad + cuanto).min(100000)
   }
   
   method desacelerar(cuanto) {
-    velocidad = cuanto.min(0)
+    velocidad = (velocidad - cuanto).max(0)
   }
   
   method irHaciaElSol() {
@@ -27,11 +27,11 @@ class NaveEspacial {
   }
   
   method acercarseUnPocoAlSol() {
-    direccionSol += 1
+    direccionSol = (direccionSol + 1).min(10)
   }
   
   method alejarseUnPocoDelSol() {
-    direccionSol -= 1
+    direccionSol = (direccionSol - 1).max(-10)
   }
 }
 
@@ -44,9 +44,48 @@ class NaveBaliza inherits NaveEspacial {
 }
 
 class NavePasajeros inherits NaveEspacial {
+  const cantidadPasajeros
+  var racionesComida
+  var racionesBebida
   
+  method cantidadPasajeros() = cantidadPasajeros
+  
+  method cargarRacionComida(nuevoValor) {
+    racionesComida += nuevoValor
+  }
+  
+  method cargarRacionBebida(nuevoValor) {
+    racionesBebida += nuevoValor
+  }
 }
 
 class NaveCombate inherits NaveEspacial {
+  var estaInvisible
+  var misilesDesplegados
+  const mensajesEmitidos = []
   
+  method estaInvisible() = estaInvisible
+  method ponerseInvisible() {
+    estaInvisible = true
+  }
+  method ponerseVisible() {
+    estaInvisible = false
+  }
+  
+  method misilesDesplegados() = misilesDesplegados
+  method desplegarMisiles() {
+    misilesDesplegados = true
+  }
+  method replegarMisiles() {
+    misilesDesplegados = false
+  }
+
+  method mensajesEmitidos() = mensajesEmitidos
+  method emitirMensaje(mensaje) {
+    mensajesEmitidos.add(mensaje)
+  }
+  method primerMensajeEmitido() = mensajesEmitidos.first()
+  method ultimoMensajeEmitido() = mensajesEmitidos.last()
+  method esEscueta() = !self.tieneAlgunMensajeDeMasDe30()
+  method tieneAlgunMensajeDeMasDe30() = mensajesEmitidos.any({m => m.size() > 30})
 }
